@@ -1,3 +1,4 @@
+import Header from "./Header";
 import ShowDailyVerses from "./ShowDailyVerses";
 
 export default function App() {
@@ -17,8 +18,10 @@ export default function App() {
 
   return (
     <>
-      <h1 className="mt-4">Bible Daily Reading</h1>
-      <ShowDailyVerses day={day} />
+      <Header />
+      <div className="container">
+        <ShowDailyVerses day={day} />
+      </div>
     </>
   );
 }
