@@ -5,6 +5,7 @@ export default function ShowDailyVerses({ day }) {
 
   return (
     <blockquote className="blockquote mt-4">
+      <p className="lead mb-1">Day - {day}</p>
       <p>{dailyReading}</p>
     </blockquote>
   );
