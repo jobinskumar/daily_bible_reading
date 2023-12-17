@@ -1,5 +1,6 @@
 import Header from "./Header";
 import ShowDailyVerses from "./ShowDailyVerses";
+import Calendar from "./calendar/Calendar";
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
       <Header />
       <div className="container">
         <ShowDailyVerses day={day} />
+        <Calendar currentDate={new Date()} />
       </div>
     </>
   );

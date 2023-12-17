@@ -1,3 +1,7 @@
+html {
+  font-size: 12px;
+}
+
 body {
   height: 100%;
   background: linear-gradient(271deg, #d9faf1, #cfeffc, #d8e2fc, #e9dffe);
@@ -41,3 +45,5 @@ body {
     background-position: 0% 50%;
   }
 }
+
+@import url('/src/calendar/calendar.css');
