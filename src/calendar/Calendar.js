@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 export default function Calendar({currentDate}) {
-  currentDate.setDate(1);
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth();
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
 
   function getCalendarState(currentMonth) {
     const displayMonth = currentDate.toLocaleDateString('en-US', {month: 'long'});
-    const startDayInWeek = currentDate.getDay();
+    const startDayInWeek = getStartDate(currentDate).getDay();
     const endDay = getEndDate(currentDate).getDate();
     const days = getDays(startDayInWeek, endDay);
 
@@ -36,15 +37,23 @@ export default function Calendar({currentDate}) {
       const displayDay = i >= startDayInWeek && day <= endDay
         ? day++
         : "";
-      days.push(<div key={i} className="day bg-light bg-opacity-50">{displayDay}</div>)      
+      days.push(<div key={i} className={`day bg-light bg-opacity-50 ${ currentDay === displayDay ? "fw-bold ": ""}`}>{displayDay}</div>)      
     }
 
     return days;
   }
 
+  function getStartDate(currentDate) {
+    return new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+  }
+
   function getEndDate(currentDate) {
     return new Date(
-      currentDate.getYear(),
+      currentDate.getFullYear(),
       currentDate.getMonth() + 1,
       0
     );
@@ -66,6 +75,16 @@ export default function Calendar({currentDate}) {
     updateCalendar(currentDate.getMonth() + 1);
   }
 
+  function getWeekDays() {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const displayDays = [];
+    days.forEach((day) => {
+      displayDays.push(<div key={day} className="day bg-light bg-opacity-50 fw-bold">{day}</div>)
+    })
+
+    return displayDays;
+  }
+
   return (
     <>
       <div className="d-flex mb-2">
@@ -76,7 +95,7 @@ export default function Calendar({currentDate}) {
         >
           Prev
         </button>
-        <p className="align-self-center flex-grow-1 m-0 text-center">{state.displayMonth}</p>
+        <p className="align-self-center flex-grow-1 m-0 text-center fw-bold">{state.displayMonth} 2023</p>
         <button
           type="button"
           className="btn btn-outline-primary btn-sm h-100"
@@ -85,7 +104,10 @@ export default function Calendar({currentDate}) {
           Next
         </button>
       </div>
-      <div className="calendar">{state.days}</div>
+      <div className="calendar">
+        {getWeekDays()}
+        {state.days}
+      </div>
     </>
   );
 }
