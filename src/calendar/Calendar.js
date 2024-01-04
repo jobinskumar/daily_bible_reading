@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-export default function Calendar({currentDate}) {
-  const currentDay = currentDate.getDate();
-  const currentMonth = currentDate.getMonth();
+export default function Calendar({currentDate, handleSelection}) {
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
 
   function getCalendarState(currentMonth) {
@@ -29,15 +27,25 @@ export default function Calendar({currentDate}) {
     });
   }
 
+  function onDaySelection(event) {
+    const day = event.target.getAttribute("data-day");
+    const month = (+event.target.getAttribute("data-month") + 1).toString();
+    handleSelection({day, month});
+  }
+
   function getDays(startDayInWeek, endDay) {
     const days = [];
     const rows = Math.ceil((startDayInWeek + endDay) / 7);
+    const currentDay = (new Date()).getDate();
+    const currentMonth = (new Date()).getMonth();
     let day = 1;
     for (let i = 0; i < rows * 7; i++) {
       const displayDay = i >= startDayInWeek && day <= endDay
         ? day++
         : "";
-      days.push(<div key={i} className={`day bg-light bg-opacity-50 ${ currentDay === displayDay ? "fw-bold ": ""}`}>{displayDay}</div>)      
+      days.push(<div key={i} className={`day bg-light bg-opacity-50 ${
+        currentDay === displayDay && currentMonth === currentDate.getMonth() ? "fw-bold": ""
+      }`} data-day={displayDay} data-month={currentDate.getMonth()} onClick={onDaySelection}>{displayDay}</div>)      
     }
 
     return days;
