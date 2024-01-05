@@ -46,4 +46,8 @@ body {
   }
 }
 
+.min-h-50 {
+  min-height: 50px;
+}
+
 @import url('/src/calendar/calendar.css');

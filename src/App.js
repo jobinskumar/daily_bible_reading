@@ -29,7 +29,7 @@ export default function App() {
       <Header />
       <div className="container">
         <ShowDailyVerses day={day} />
-        <Calendar currentDate={new Date()} handleSelection={handleSelection} />
+        <Calendar handleSelection={handleSelection} />
       </div>
     </>
   );
