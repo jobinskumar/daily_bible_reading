@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-export default function Calendar({currentDate, handleSelection}) {
+export default function Calendar({handleSelection}) {
+  const [currentDate] = useState(new Date());
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
 
   function getCalendarState(currentMonth) {
