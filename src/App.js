@@ -1,26 +1,16 @@
 import { useState } from "react";
-import Header from "./Header";
-import ShowDailyVerses from "./ShowDailyVerses";
+import Header from "./header/Header";
+import ShowDailyVerses from "./dailyVerses/ShowDailyVerses";
 import Calendar from "./calendar/Calendar";
 
 export default function App() {
-  const [day, setDay] = useState(getDayOfTheYear((new Date()).toISOString()));
-
-  function getDayOfTheYear(currentDate) {
-    var now = new Date(currentDate);
-    //var now = currentDate;
-    var start = new Date(now.getFullYear(), 0, 0);
-    var diff = now.getTime() - start.getTime();
-    var oneDay = 1000 * 60 * 60 * 24;
-    var day = Math.floor(diff / oneDay);
-
-    return day;
-  }
+  const currentYear = (new Date()).getFullYear();
+  const [dateString, setDateString] = useState((new Date()).toISOString());
 
   function handleSelection({day, month}) {
     if (day && month) {
-      const dateString = '2023-' + month.padStart(2,'0') + '-' + day.padStart(2,'0') + 'T00:00:00.000Z';
-      setDay(getDayOfTheYear(dateString));
+      const dateString = currentYear + '-' + month.padStart(2,'0') + '-' + day.padStart(2,'0') + 'T00:00:00.000Z';
+      setDateString(dateString);
     }
   }
 
@@ -28,7 +18,7 @@ export default function App() {
     <>
       <Header />
       <div className="container">
-        <ShowDailyVerses day={day} />
+        <ShowDailyVerses dateString={dateString} />
         <Calendar handleSelection={handleSelection} />
       </div>
     </>
