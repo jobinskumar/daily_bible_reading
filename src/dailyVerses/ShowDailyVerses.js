@@ -41,16 +41,19 @@ export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
   }
 
   return (
-    <>
-      <blockquote className="blockquote mt-4">
+    <div className="border-bottom border-info container show-daily-verse">
+      <h1 className="h3 py-3 text-center">Daily Bible Reading</h1>
+      <blockquote className="blockquote mx-2">
         <p className="mb-1">Day - {day}</p>
         <p className="min-h-50">{dailyReading}</p>
       </blockquote>
-      {
-        dailyStatus?.bibleReading
-        ? <button className="btn btn-secondary mb-3" onClick={markAsUnread}>Mark as unread</button>
-        : <button className="btn btn-primary mb-3" onClick={markAsRead}>Mark as read</button>
-      }
-    </>
+      <div className="d-grid gap-2 col-6 mx-auto">
+        {
+          dailyStatus?.bibleReading
+          ? <button className="btn btn-secondary mb-3" onClick={markAsUnread}>Mark as unread</button>
+          : <button className="btn btn-primary mb-3" onClick={markAsRead}>Mark as read</button>
+        }
+      </div>
+    </div>
   );
 }

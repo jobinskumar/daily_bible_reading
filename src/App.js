@@ -20,12 +20,9 @@ export default function App() {
   }
 
   return (
-    <>
-      <Header />
-      <div className="container">
-        <ShowDailyVerses dateString={dateString} onDailyStatusUpdate={updateDailyStatusInCalendar} />
-        <Calendar handleSelection={handleSelection} isDailyStatusUpdated={dailyStatus} />
-      </div>
-    </>
+    <div>
+      <ShowDailyVerses dateString={dateString} onDailyStatusUpdate={updateDailyStatusInCalendar} />
+      <Calendar handleSelection={handleSelection} isDailyStatusUpdated={dailyStatus} />
+    </div>
   );
 }

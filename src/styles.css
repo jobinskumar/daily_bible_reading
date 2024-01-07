@@ -4,46 +4,6 @@ html {
 
 body {
   height: 100%;
-  background: linear-gradient(271deg, #d9faf1, #cfeffc, #d8e2fc, #e9dffe);
-  background-size: 800% 800%;
-
-  -webkit-animation: AnimationName 15s ease infinite;
-  -moz-animation: AnimationName 15s ease infinite;
-  animation: AnimationName 15s ease infinite;
-}
-
-@-webkit-keyframes AnimationName {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@-moz-keyframes AnimationName {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes AnimationName {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 .min-h-50 {
@@ -51,3 +11,4 @@ body {
 }
 
 @import url('/src/calendar/calendar.css');
+@import url('/src/dailyVerses/daily-verses.css');
