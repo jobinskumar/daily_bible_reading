@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Header from "./header/Header";
 import ShowDailyVerses from "./dailyVerses/ShowDailyVerses";
 import Calendar from "./calendar/Calendar";
+import { getISOLocalDateString } from "./utils/utils";
 
 export default function App() {
   const currentYear = (new Date()).getFullYear();
-  const [dateString, setDateString] = useState((new Date()).toISOString());
+  const [dateString, setDateString] = useState(getISOLocalDateString(new Date()));
   const [dailyStatus, setDailyStatus] = useState({});
 
   function handleSelection({day, month}) {
