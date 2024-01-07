@@ -6,6 +6,7 @@ import Calendar from "./calendar/Calendar";
 export default function App() {
   const currentYear = (new Date()).getFullYear();
   const [dateString, setDateString] = useState((new Date()).toISOString());
+  const [dailyStatus, setDailyStatus] = useState({});
 
   function handleSelection({day, month}) {
     if (day && month) {
@@ -14,12 +15,16 @@ export default function App() {
     }
   }
 
+  function updateDailyStatusInCalendar(state) {
+    setDailyStatus(state);
+  }
+
   return (
     <>
       <Header />
       <div className="container">
-        <ShowDailyVerses dateString={dateString} />
-        <Calendar handleSelection={handleSelection} />
+        <ShowDailyVerses dateString={dateString} onDailyStatusUpdate={updateDailyStatusInCalendar} />
+        <Calendar handleSelection={handleSelection} isDailyStatusUpdated={dailyStatus} />
       </div>
     </>
   );
