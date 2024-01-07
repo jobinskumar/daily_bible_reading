@@ -62,13 +62,13 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
           key={i}
           className={`day ${
             currentDay === displayDay && currentMonth === currentDate.getMonth()
-              ? "fw-bold bg-white"
+              ? "current text-decoration-underline bg-white"
               : "bg-opacity-50"
           } ${
             +selectedDate.day === displayDay &&
             selectedDate.month - 1 === currentDate.getMonth()
               ? "selected"
-              : "bg-light"
+              : "bg-white"
           }`}
           data-day={displayDay}
           data-month={currentDate.getMonth()}
@@ -119,41 +119,39 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const displayDays = [];
     days.forEach((day) => {
-      displayDays.push(<div key={day} className="day bg-light bg-opacity-50 fw-bold">{day}</div>)
+      displayDays.push(<div key={day} className="day bg-white fw-bold">{day}</div>)
     })
 
     return displayDays;
   }
 
   return (
-    <>
+    <div className="container mt-3">
       <div className="d-flex mb-2">
-        {currentDate.getMonth() !== 0 && (
-          <button
-            type="button"
-            className="btn btn-outline-primary btn-sm h-100"
-            onClick={showPrevMonth}
-          >
-            Prev
-          </button>
-        )}
-        <p className="align-self-center flex-grow-1 m-0 text-center fw-bold">
+        <p className="align-self-center flex-grow-1 m-0 fw-bold">
           {state.displayMonth} {currentDate.getFullYear()}
         </p>
-        {currentDate.getMonth() !== 11 && (
-          <button
+        <button
             type="button"
-            className="btn btn-outline-primary btn-sm h-100"
+            className="btn btn-outline-primary h-100 border-0 me-1"
+            disabled={currentDate.getMonth() === 0}
+            onClick={showPrevMonth}
+          >
+            <i className="bi-arrow-left"></i>
+        </button>
+        <button
+            type="button"
+            className="btn btn-outline-primary h-100 border-0"
+            disabled={currentDate.getMonth() === 11}
             onClick={showNextMonth}
           >
-            Next
+            <i className="bi-arrow-right"></i>
           </button>
-        )}
       </div>
       <div className="calendar">
         {getWeekDays()}
         {days}
       </div>
-    </>
+    </div>
   );
 }
