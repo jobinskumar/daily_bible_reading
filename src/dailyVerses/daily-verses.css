@@ -1,3 +1,7 @@
 .show-daily-verse {
   background-color: #ebf6fa;
+
+  .reset-btn {
+    justify-self: center;
+  }
 }

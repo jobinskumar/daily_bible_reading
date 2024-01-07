@@ -14,3 +14,18 @@ export function setDailyStateInLocalStorage(date, data) {
 
   localStorage.setItem('dailyStatus', JSON.stringify(dailyStatus));
 }
+
+export function getISOLocalDateString(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const dateString =
+    year +
+    "-" +
+    (month + 1).toString().padStart(2, "0") +
+    "-" +
+    day.toString().padStart(2, "0") +
+    "T00:00:00.000Z";
+
+  return dateString;
+}
