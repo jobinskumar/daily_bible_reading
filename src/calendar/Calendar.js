@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Calendar({handleSelection}) {
+export default function Calendar({handleSelection, isDailyStatusUpdated}) {
   const [selectedDate, setSelectedDate] = useState({});
   const [currentDate] = useState(new Date());
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
@@ -8,7 +8,7 @@ export default function Calendar({handleSelection}) {
 
   useEffect(() => {
     setDays(getDays());
-  }, [selectedDate])
+  }, [selectedDate, isDailyStatusUpdated])
 
   function getCalendarState(currentMonth) {
     const displayMonth = currentDate.toLocaleDateString('en-US', {month: 'long'});
@@ -47,10 +47,16 @@ export default function Calendar({handleSelection}) {
     const currentDay = (new Date()).getDate();
     const currentMonth = (new Date()).getMonth();
     let day = 1;
+    const dailyStatus = JSON.parse(localStorage.getItem('dailyStatus') || '{}');
     for (let i = 0; i < rows * 7; i++) {
       const displayDay = i >= startDayInWeek && day <= endDay
         ? day++
         : "";
+      const isBibleRead = dailyStatus[
+        currentDate.getFullYear() + '-' +
+        (currentDate.getMonth() + 1).toString().padStart(2,'0') + '-' +
+        displayDay.toString().padStart(2,'0')
+      ]?.bibleReading;
       days.push(
         <div
           key={i}
@@ -69,6 +75,7 @@ export default function Calendar({handleSelection}) {
           onClick={onDaySelection}
         >
           {displayDay}
+          {isBibleRead && <span className="marker"></span>}          
         </div>
       );      
     }

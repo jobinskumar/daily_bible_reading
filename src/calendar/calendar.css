@@ -9,10 +9,22 @@
     padding: 1%;
     text-align: center;
     padding-block: 7px;
+    position: relative;
   }
 
   .selected {
     background: #0d6efd !important;
     color: white;
+  }
+
+  .marker {
+    width: 6px;
+    height: 6px;
+    display: block;
+    background: #05b4fc;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
   }
 }

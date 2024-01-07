@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getDailyStateFromLocalStorage, setDailyStateInLocalStorage } from "../utils/utils";
 import { DailVerseData } from "./DailyVerseData";
 
-export default function ShowDailyVerses({ dateString }) {
+export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
   const dailyStatusKey = dateString.split('T')[0];
   const [dailyStatus, setDailyStatus] = useState(false);
   const day = getDayOfTheYear(dateString);
@@ -28,6 +28,7 @@ export default function ShowDailyVerses({ dateString }) {
     };
     setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
+    onDailyStatusUpdate(newState);
   }
 
   function markAsUnread() {
@@ -36,6 +37,7 @@ export default function ShowDailyVerses({ dateString }) {
     };
     setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
+    onDailyStatusUpdate(newState);
   }
 
   return (
