@@ -126,7 +126,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
   }
 
   return (
-    <div className="container mt-3">
+    <div className="container mt-3 px-3">
       <div className="d-flex mb-2">
         <p className="align-self-center flex-grow-1 m-0 fw-bold">
           {state.displayMonth} {currentDate.getFullYear()}
