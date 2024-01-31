@@ -28,9 +28,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
       displayMonth: displayMonth
     });
     setDays(getDays());
-    
-    console.log(currentMonth, displayMonth)
-  }
+      }
 
   function onDaySelection(event) {
     const day = event.target.getAttribute("data-day");
