@@ -20,7 +20,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
   }
 
   function updateCalendar(currentMonth) {
-    currentDate.setMonth(currentMonth);
+    currentDate.setMonth(currentMonth, 1);
     const { displayMonth } = getCalendarState();
 
     setState({
@@ -28,6 +28,8 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
       displayMonth: displayMonth
     });
     setDays(getDays());
+    
+    console.log(currentMonth, displayMonth)
   }
 
   function onDaySelection(event) {
