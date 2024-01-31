@@ -20,7 +20,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
   }
 
   function updateCalendar(currentMonth) {
-    currentDate.setMonth(currentMonth);
+    currentDate.setMonth(currentMonth, 1);
     const { displayMonth } = getCalendarState();
 
     setState({
