@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDailyStateFromLocalStorage, setDailyStateInLocalStorage } from "../utils/utils";
+import { formatDateString, getDailyStateFromLocalStorage, setDailyStateInLocalStorage } from "../utils/utils";
 import { DailVerseData } from "./DailyVerseData";
 
 export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
@@ -41,11 +41,11 @@ export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
   }
 
   return (
-    <div className="border-bottom border-info container show-daily-verse">
-      <h1 className="h3 py-4 text-center">Daily Bible Reading</h1>
+    <div className="border-bottom px-2 border-info show-daily-verse">
+      <h1 className="h3 pb-4 text-center">Daily Bible Reading</h1>
       <blockquote className="blockquote mx-2">
         <p>
-          Day - {day} 
+          Day - {day} ({formatDateString(dateString)})
           { dailyStatus?.bibleReading && <span className="badge text-bg-success ms-2">Read</span> }
         </p>
         <p className="min-h-50">{dailyReading}</p>

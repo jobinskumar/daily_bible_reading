@@ -1,28 +1,32 @@
-import { useState } from "react";
-import ShowDailyVerses from "./dailyVerses/ShowDailyVerses";
-import Calendar from "./calendar/Calendar";
-import { getISOLocalDateString } from "./utils/utils";
+import { useEffect, useState } from "react";
+import Login from "./login/Login";
+import Home from "./home/Home";
+import AppHeader from "./header/AppHeader";
+import { AuthContext } from "./auth/Auth";
 
 export default function App() {
-  const currentYear = (new Date()).getFullYear();
-  const [dateString, setDateString] = useState(getISOLocalDateString(new Date()));
-  const [dailyStatus, setDailyStatus] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!sessionStorage.getItem("accessToken")
+  );
+  const [isShowLogin, setIsShowLogin] = useState(false);
 
-  function handleSelection({day, month}) {
-    if (day && month) {
-      const dateString = currentYear + '-' + month.padStart(2,'0') + '-' + day.padStart(2,'0') + 'T00:00:00.000Z';
-      setDateString(dateString);
-    }
-  }
-
-  function updateDailyStatusInCalendar(state) {
-    setDailyStatus(state);
-  }
+  useEffect(() => {
+    window.addEventListener("userLoggedIn", (data) => {
+      setIsLoggedIn(true);
+      setIsShowLogin(false);
+    });
+  }, []);
 
   return (
-    <div>
-      <ShowDailyVerses dateString={dateString} onDailyStatusUpdate={updateDailyStatusInCalendar} />
-      <Calendar handleSelection={handleSelection} isDailyStatusUpdated={dailyStatus} />
-    </div>
+    <>
+      {isShowLogin && !isLoggedIn ? (
+        <Login setIsLoggedIn={setIsLoggedIn} />
+      ) : (
+        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+          <AppHeader setIsShowLogin={setIsShowLogin} />
+          <Home />
+        </AuthContext.Provider>
+      )}
+    </>
   );
 }

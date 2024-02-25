@@ -29,3 +29,8 @@ export function getISOLocalDateString(date) {
 
   return dateString;
 }
+
+// This function will convert date string 2024-02-25T00:00:00.000Z to 25-02-2024
+export function formatDateString(dateString) {
+  return dateString.split('T')[0].split('-').reverse().join('-');
+}

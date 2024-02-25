@@ -12,3 +12,5 @@ body {
 
 @import url('/src/calendar/calendar.css');
 @import url('/src/dailyVerses/daily-verses.css');
+@import url('/src/login/login.css');
+@import url('/src/header/app-header.css');

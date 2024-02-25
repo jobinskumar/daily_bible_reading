@@ -59,6 +59,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
       ]?.bibleReading;
       days.push(
         <div
+          role="button"
           key={i}
           className={`day ${
             currentDay === displayDay && currentMonth === currentDate.getMonth()
