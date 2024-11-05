@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 
-export default function Calendar({handleSelection, isDailyStatusUpdated}) {
+export default function Calendar({
+  handleSelection,
+  isDailyStatusUpdated,
+  userBibleReadingData,
+}) {
+  const [dailyUserBibleReadingData, setDailyUserBibleReadingData] = useState(
+    {}
+  );
   const [selectedDate, setSelectedDate] = useState({});
   const [currentDate] = useState(new Date());
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
@@ -8,14 +15,22 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
 
   useEffect(() => {
     setDays(getDays());
-  }, [selectedDate, isDailyStatusUpdated])
+  }, [selectedDate, isDailyStatusUpdated, dailyUserBibleReadingData]);
+
+  useEffect(() => {
+    if (userBibleReadingData) {
+      setDailyUserBibleReadingData(userBibleReadingData);
+    }
+  }, [userBibleReadingData]);
 
   function getCalendarState(currentMonth) {
-    const displayMonth = currentDate.toLocaleDateString('en-US', {month: 'long'});
+    const displayMonth = currentDate.toLocaleDateString("en-US", {
+      month: "long",
+    });
 
     return {
       currentMonth: currentMonth,
-      displayMonth: displayMonth
+      displayMonth: displayMonth,
     };
   }
 
@@ -25,7 +40,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
 
     setState({
       currentMonth: currentMonth,
-      displayMonth: displayMonth
+      displayMonth: displayMonth,
     });
     setDays(getDays());
   }
@@ -34,8 +49,8 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const day = event.target.getAttribute("data-day");
     const month = (+event.target.getAttribute("data-month") + 1).toString();
     if (day && month) {
-      setSelectedDate({day, month});
-      handleSelection({day, month});
+      setSelectedDate({ day, month });
+      handleSelection({ day, month });
     }
   }
 
@@ -44,19 +59,19 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const startDayInWeek = getStartDate(currentDate).getDay();
     const endDay = getEndDate(currentDate).getDate();
     const rows = Math.ceil((startDayInWeek + endDay) / 7);
-    const currentDay = (new Date()).getDate();
-    const currentMonth = (new Date()).getMonth();
+    const currentDay = new Date().getDate();
+    const currentMonth = new Date().getMonth();
     let day = 1;
-    const dailyStatus = JSON.parse(localStorage.getItem('dailyStatus') || '{}');
     for (let i = 0; i < rows * 7; i++) {
-      const displayDay = i >= startDayInWeek && day <= endDay
-        ? day++
-        : "";
-      const isBibleRead = dailyStatus[
-        currentDate.getFullYear() + '-' +
-        (currentDate.getMonth() + 1).toString().padStart(2,'0') + '-' +
-        displayDay.toString().padStart(2,'0')
-      ]?.bibleReading;
+      const displayDay = i >= startDayInWeek && day <= endDay ? day++ : "";
+      const isBibleRead =
+        dailyUserBibleReadingData[
+          currentDate.getFullYear() +
+            "-" +
+            (currentDate.getMonth() + 1).toString().padStart(2, "0") +
+            "-" +
+            displayDay.toString().padStart(2, "0")
+        ]?.bibleReading;
       days.push(
         <div
           role="button"
@@ -76,28 +91,20 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
           onClick={onDaySelection}
         >
           {displayDay}
-          {isBibleRead && <span className="marker"></span>}          
+          {isBibleRead && <span className="marker"></span>}
         </div>
-      );      
+      );
     }
 
     return days;
   }
 
   function getStartDate(currentDate) {
-    return new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   }
 
   function getEndDate(currentDate) {
-    return new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0
-    );
+    return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   }
 
   function showPrevMonth() {
@@ -120,8 +127,12 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const displayDays = [];
     days.forEach((day) => {
-      displayDays.push(<div key={day} className="day bg-white fw-bold">{day}</div>)
-    })
+      displayDays.push(
+        <div key={day} className="day bg-white fw-bold">
+          {day}
+        </div>
+      );
+    });
 
     return displayDays;
   }
@@ -133,21 +144,21 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
           {state.displayMonth} {currentDate.getFullYear()}
         </p>
         <button
-            type="button"
-            className="btn btn-outline-primary h-100 border-0 me-1"
-            disabled={currentDate.getMonth() === 0}
-            onClick={showPrevMonth}
-          >
-            <i className="bi-arrow-left"></i>
+          type="button"
+          className="btn btn-outline-primary h-100 border-0 me-1"
+          disabled={currentDate.getMonth() === 0}
+          onClick={showPrevMonth}
+        >
+          <i className="bi-arrow-left"></i>
         </button>
         <button
-            type="button"
-            className="btn btn-outline-primary h-100 border-0"
-            disabled={currentDate.getMonth() === 11}
-            onClick={showNextMonth}
-          >
-            <i className="bi-arrow-right"></i>
-          </button>
+          type="button"
+          className="btn btn-outline-primary h-100 border-0"
+          disabled={currentDate.getMonth() === 11}
+          onClick={showNextMonth}
+        >
+          <i className="bi-arrow-right"></i>
+        </button>
       </div>
       <div className="calendar">
         {getWeekDays()}

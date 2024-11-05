@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { createContext } from "react";
+import { getDatabase } from "firebase/database";
 
 export const AuthContext = createContext({
   isLoggedIn: false,
@@ -19,6 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
+export const database = getDatabase(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {

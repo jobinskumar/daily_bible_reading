@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ShowDailyVerses from "../dailyVerses/ShowDailyVerses";
 import Calendar from "../calendar/Calendar";
 import { getISOLocalDateString } from "../utils/utils";
-import AppHeader from "../header/AppHeader";
+import { auth, database } from "../auth/Auth";
+import { onValue, ref } from "firebase/database";
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -10,6 +11,19 @@ export default function Home() {
     getISOLocalDateString(new Date())
   );
   const [dailyStatus, setDailyStatus] = useState({});
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    window.addEventListener("userLoggedIn", () => {
+      const uid = auth.currentUser.uid;
+      const myReadingRef = ref(database, `users/${uid}/my-reading`);
+
+      onValue(myReadingRef, (snapshot) => {
+        const data = snapshot.val();
+        setData(data);
+      });
+    });
+  }, []);
 
   function handleSelection({ day, month }) {
     if (day && month) {
@@ -37,6 +51,7 @@ export default function Home() {
       <Calendar
         handleSelection={handleSelection}
         isDailyStatusUpdated={dailyStatus}
+        userBibleReadingData={data}
       />
     </>
   );
