@@ -15,6 +15,7 @@ const firebaseConfig = {
   storageBucket: "my-bible-reading.appspot.com",
   messagingSenderId: "---------ID---------",
   appId: "---------APP-ID---------",
+  databaseURL: "https://my-bible-reading-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 // Initialize Firebase
