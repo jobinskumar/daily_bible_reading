@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import ShowDailyVerses from "../dailyVerses/ShowDailyVerses";
 import Calendar from "../calendar/Calendar";
-import { getISOLocalDateString } from "../utils/utils";
-import { auth, database } from "../auth/Auth";
-import { onValue, ref } from "firebase/database";
+import {
+  getDailyStateFromDB,
+  getISOLocalDateString,
+  setDailyStateInDB,
+} from "../utils/utils";
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -15,11 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     window.addEventListener("userLoggedIn", () => {
-      const uid = auth.currentUser.uid;
-      const myReadingRef = ref(database, `users/${uid}/my-reading`);
-
-      onValue(myReadingRef, (snapshot) => {
-        const data = snapshot.val();
+      getDailyStateFromDB((data) => {
         setData(data);
       });
     });
@@ -28,24 +26,23 @@ export default function Home() {
   function handleSelection({ day, month }) {
     if (day && month) {
       const dateString =
-        currentYear +
-        "-" +
-        month.padStart(2, "0") +
-        "-" +
-        day.padStart(2, "0") +
-        "T00:00:00.000Z";
-      setDateString(dateString);
+        currentYear + "-" + month.padStart(2, "0") + "-" + day.padStart(2, "0");
+      setDailyStatus(data[dateString]);
+      setDateString(dateString + "T00:00:00.000Z");
     }
   }
 
-  function updateDailyStatusInCalendar(state) {
-    setDailyStatus(state);
+  function updateDailyStatusInCalendar(dateKey, newState) {
+    // TODO: return updated data and based on that data update calendar
+    setDailyStateInDB(dateKey, newState);
+    setDailyStatus(newState);
   }
 
   return (
     <>
       <ShowDailyVerses
         dateString={dateString}
+        dailyStatusData={dailyStatus}
         onDailyStatusUpdate={updateDailyStatusInCalendar}
       />
       <Calendar

@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
-import { formatDateString, getDailyStateFromLocalStorage, setDailyStateInLocalStorage } from "../utils/utils";
+import { formatDateString } from "../utils/utils";
 import { DailVerseData } from "./DailyVerseData";
 
-export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
-  const dailyStatusKey = dateString.split('T')[0];
+export default function ShowDailyVerses({
+  dateString,
+  dailyStatusData,
+  onDailyStatusUpdate,
+}) {
+  const dailyStatusKey = dateString.split("T")[0];
   const [dailyStatus, setDailyStatus] = useState(false);
   const day = getDayOfTheYear(dateString);
-  const dailyReading = DailVerseData.find(value => +value.day === day)?.readingVerses ?? "";
+  const dailyReading =
+    DailVerseData.find((value) => +value.day === day)?.readingVerses ?? "";
 
   useEffect(() => {
-    setDailyStatus(getDailyStateFromLocalStorage(dailyStatusKey));
-  }, [dailyStatusKey])
+    setDailyStatus(dailyStatusData);
+  }, [dailyStatusData]);
 
   function getDayOfTheYear(date) {
     var now = new Date(date);
@@ -24,20 +29,18 @@ export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
 
   function markAsRead() {
     const newState = {
-      bibleReading: true
+      bibleReading: true,
     };
-    setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
-    onDailyStatusUpdate(newState);
+    onDailyStatusUpdate(dailyStatusKey, newState);
   }
 
   function markAsUnread() {
     const newState = {
-      bibleReading: false
+      bibleReading: false,
     };
-    setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
-    onDailyStatusUpdate(newState);
+    onDailyStatusUpdate(dailyStatusKey, newState);
   }
 
   return (
@@ -46,16 +49,25 @@ export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
       <blockquote className="blockquote mx-2">
         <p>
           Day - {day} ({formatDateString(dateString)})
-          { dailyStatus?.bibleReading && <span className="badge text-bg-success ms-2">Read</span> }
+          {dailyStatus?.bibleReading && (
+            <span className="badge text-bg-success ms-2">Read</span>
+          )}
         </p>
         <p className="min-h-50">{dailyReading}</p>
       </blockquote>
       <div className="d-grid gap-2 col-6 mx-auto mb-2">
-        {
-          dailyStatus?.bibleReading
-          ? <button className="btn btn-secondary mb-3 reset-btn" onClick={markAsUnread}>Reset</button>
-          : <button className="btn btn-primary mb-3" onClick={markAsRead}>Mark as read</button>
-        }
+        {dailyStatus?.bibleReading ? (
+          <button
+            className="btn btn-secondary mb-3 reset-btn"
+            onClick={markAsUnread}
+          >
+            Reset
+          </button>
+        ) : (
+          <button className="btn btn-primary mb-3" onClick={markAsRead}>
+            Mark as read
+          </button>
+        )}
       </div>
     </div>
   );

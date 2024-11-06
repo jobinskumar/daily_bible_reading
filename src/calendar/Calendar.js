@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getDailyStateFromDB } from "../utils/utils";
 
 export default function Calendar({
   handleSelection,
@@ -15,7 +16,13 @@ export default function Calendar({
 
   useEffect(() => {
     setDays(getDays());
-  }, [selectedDate, isDailyStatusUpdated, dailyUserBibleReadingData]);
+  }, [selectedDate, dailyUserBibleReadingData]);
+
+  useEffect(() => {
+    getDailyStateFromDB((data) => {
+      setDailyUserBibleReadingData(data);
+    });
+  }, [isDailyStatusUpdated]);
 
   useEffect(() => {
     if (userBibleReadingData) {
