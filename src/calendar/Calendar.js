@@ -85,12 +85,12 @@ export default function Calendar({
           key={i}
           className={`day ${
             currentDay === displayDay && currentMonth === currentDate.getMonth()
-              ? "current text-decoration-underline bg-white"
+              ? "current bg-white text-primary border border-primary"
               : "bg-opacity-50"
           } ${
             +selectedDate.day === displayDay &&
             selectedDate.month - 1 === currentDate.getMonth()
-              ? "selected"
+              ? "selected text-white"
               : "bg-white"
           }`}
           data-day={displayDay}
