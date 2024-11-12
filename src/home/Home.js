@@ -19,6 +19,7 @@ export default function Home() {
     window.addEventListener("userLoggedIn", () => {
       getDailyStateFromDB((data) => {
         setData(data);
+        setDailyStatus(data[dateString.split('T')[0]]);
       });
     });
   }, []);
