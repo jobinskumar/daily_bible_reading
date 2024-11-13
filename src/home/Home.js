@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ShowDailyVerses from "../dailyVerses/ShowDailyVerses";
 import Calendar from "../calendar/Calendar";
 import {
@@ -6,6 +6,7 @@ import {
   getISOLocalDateString,
   setDailyStateInDB,
 } from "../utils/utils";
+import { AuthContext } from "../auth/Auth";
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -13,16 +14,20 @@ export default function Home() {
     getISOLocalDateString(new Date())
   );
   const [dailyStatus, setDailyStatus] = useState({});
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
+  const { isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
-    window.addEventListener("userLoggedIn", () => {
+    if (isLoggedIn) {
       getDailyStateFromDB((data) => {
         setData(data);
-        setDailyStatus(data[dateString.split('T')[0]]);
+        setDailyStatus(data[dateString.split("T")[0]]);
       });
-    });
-  }, []);
+    } else {
+      setData({});
+      setDailyStatus({});
+    }
+  }, [isLoggedIn]);
 
   function handleSelection({ day, month }) {
     if (day && month) {

@@ -5,9 +5,7 @@ import AppHeader from "./header/AppHeader";
 import { AuthContext } from "./auth/Auth";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!sessionStorage.getItem("accessToken")
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isShowLogin, setIsShowLogin] = useState(false);
 
   useEffect(() => {

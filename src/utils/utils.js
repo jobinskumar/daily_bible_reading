@@ -34,11 +34,16 @@ export function getDailyStateFromDB(callback) {
 
 export function setDailyStateInDB(date, data) {
   getDailyStateFromDB((dataFromDB, myReadingRef) => {
-    const dailyStatus = dataFromDB;
-    dailyStatus[date] = {
-      ...dailyStatus[date],
-      ...data,
-    };
+    let dailyStatus = dataFromDB;
+    if (dailyStatus) {
+      dailyStatus[date] = {
+        ...dailyStatus[date],
+        ...data,
+      };
+    } else {
+      dailyStatus = {};
+      dailyStatus[date] = { ...data };
+    }
     set(myReadingRef, dailyStatus);
   });
 }
