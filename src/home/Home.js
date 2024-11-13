@@ -20,8 +20,10 @@ export default function Home() {
   useEffect(() => {
     if (isLoggedIn) {
       getDailyStateFromDB((data) => {
-        setData(data);
-        setDailyStatus(data[dateString.split("T")[0]]);
+        if (data) {
+          setData(data);
+          setDailyStatus(data[dateString.split("T")[0]]);
+        }
       });
     } else {
       setData({});

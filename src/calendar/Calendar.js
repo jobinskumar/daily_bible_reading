@@ -20,7 +20,7 @@ export default function Calendar({
 
   useEffect(() => {
     getDailyStateFromDB((data) => {
-      setDailyUserBibleReadingData(data);
+      setDailyUserBibleReadingData(data || {});
     });
   }, [isDailyStatusUpdated]);
 
