@@ -4,7 +4,7 @@
   grid-gap: 3px;
 
   .day {
-    border-radius: 3px;
+    border-radius: 5px;
     text-align: center;
     padding-block: 7px;
     position: relative;

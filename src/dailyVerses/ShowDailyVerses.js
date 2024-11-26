@@ -44,15 +44,15 @@ export default function ShowDailyVerses({
   }
 
   return (
-    <div className="border-bottom px-2 border-info show-daily-verse">
+    <div className="border-bottom px-2 pt-3 border-info show-daily-verse">
       <div className="d-flex">
-        <h2 className="h3 ms-2 my-2">Day - {day}</h2>
+        <h2 className="h3 ms-2 my-2">Day {day}</h2>
         {dailyStatus?.bibleReading && (
           <span className="badge text-bg-success m-auto ms-2">Read</span>
         )}
         <div className="ms-auto">
-          <p className="mb-0 me-3 mt-2 date">{formatDateString(dateString)}</p>
-          <p className="m-0 day">{getDayInWords(dateString)}</p>
+          <p className="mb-0 me-3 date">{formatDateString(dateString)}</p>
+          <p className="m-0 me-3 text-end day">{getDayInWords(dateString)}</p>
         </div>
       </div>
       <blockquote className="blockquote mx-2">
