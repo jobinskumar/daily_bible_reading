@@ -63,7 +63,21 @@ export function getISOLocalDateString(date) {
   return dateString;
 }
 
-// This function will convert date string 2024-02-25T00:00:00.000Z to 25-02-2024
+// This function will convert date string 2024-02-25T00:00:00.000Z to Feb 25, 2024
 export function formatDateString(dateString) {
-  return dateString.split("T")[0].split("-").reverse().join("-");
+  const newDate = new Date(dateString);
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+
+  return new Intl.DateTimeFormat("en-US", options).format(newDate);
+}
+
+export function getDayInWords(dateString) {
+  const newDate = new Date(dateString);
+  const options = { weekday: "long" };
+
+  return new Intl.DateTimeFormat("en-US", options).format(newDate);
 }

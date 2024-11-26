@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDateString } from "../utils/utils";
+import { formatDateString, getDayInWords } from "../utils/utils";
 import { DailVerseData } from "./DailyVerseData";
 
 export default function ShowDailyVerses({
@@ -45,15 +45,18 @@ export default function ShowDailyVerses({
 
   return (
     <div className="border-bottom px-2 border-info show-daily-verse">
-      <h1 className="h3 pb-4 text-center">Daily Bible Reading</h1>
+      <div className="d-flex">
+        <h2 className="h3 ms-2 my-2">Day - {day}</h2>
+        {dailyStatus?.bibleReading && (
+          <span className="badge text-bg-success m-auto ms-2">Read</span>
+        )}
+        <div className="ms-auto">
+          <p className="mb-0 me-3 mt-2 date">{formatDateString(dateString)}</p>
+          <p className="m-0 day">{getDayInWords(dateString)}</p>
+        </div>
+      </div>
       <blockquote className="blockquote mx-2">
-        <p>
-          Day - {day} ({formatDateString(dateString)})
-          {dailyStatus?.bibleReading && (
-            <span className="badge text-bg-success ms-2">Read</span>
-          )}
-        </p>
-        <p className="min-h-50">{dailyReading}</p>
+        <p className="min-h-50 mt-4">{dailyReading}</p>
       </blockquote>
       <div className="d-grid gap-2 col-6 mx-auto mb-2">
         {dailyStatus?.bibleReading ? (

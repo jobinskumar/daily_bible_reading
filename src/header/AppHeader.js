@@ -29,11 +29,12 @@ export default function AppHeader({ setIsShowLogin }) {
 
   return (
     <>
-      <div className="header-login d-flex justify-content-end">
+      <div className="header-login d-flex justify-content-between">
+        <h1 className="h2 mt-2 ms-3">Daily Bible Reading</h1>
         {isLoggedIn ? (
-          <div className="dropdown m-1">
+          <div className="dropdown mt-2 me-3 w-25">
             <button
-              className="btn btn-light dropdown-toggle border"
+              className="btn btn-light dropdown-toggle border w-100 text-truncate"
               type="button"
               aria-expanded="false"
               onClick={toggleDropdownMenu}

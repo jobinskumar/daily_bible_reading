@@ -4,4 +4,16 @@
   .reset-btn {
     justify-self: center;
   }
+
+  .date {
+    color: #909090;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .day {
+    color: #4c91f7;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
 }

@@ -25,7 +25,6 @@ export const database = getDatabase(app);
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    sessionStorage.setItem("accessToken", user.accessToken);
     sessionStorage.setItem("email", user.email);
     const userLoggedIn = new CustomEvent("userLoggedIn", {
       detail: {
@@ -34,7 +33,6 @@ onAuthStateChanged(auth, (user) => {
     });
     window.dispatchEvent(userLoggedIn);
   } else {
-    sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("email");
   }
 });
