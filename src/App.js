@@ -18,7 +18,7 @@ export default function App() {
   return (
     <>
       {isShowLogin && !isLoggedIn ? (
-        <Login />
+        <Login setIsShowLogin={setIsShowLogin}/>
       ) : (
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
           <AppHeader setIsShowLogin={setIsShowLogin} />

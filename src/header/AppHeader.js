@@ -30,7 +30,7 @@ export default function AppHeader({ setIsShowLogin }) {
   return (
     <>
       <div className="header-login d-flex justify-content-between">
-        <h1 className="h2 mt-3 ms-3 fw-bold">Daily Bible Reading</h1>
+        <h1 className="mt-3 ms-3 fw-bold">Daily Bible Reading</h1>
         {isLoggedIn ? (
           <div className="dropdown mt-3 me-3 w-25">
             <button

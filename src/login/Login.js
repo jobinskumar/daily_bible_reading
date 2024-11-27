@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../auth/Auth";
 
-function Login() {
+function Login({ setIsShowLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  function hideLogin() {
+    setIsShowLogin(false);
+  }
 
   const handleSubmit = async (event) => {
     setIsAuthenticating(true);
@@ -37,7 +41,7 @@ function Login() {
     <div className="login-wrapper d-flex">
       <main className="form-signin w-100 m-auto">
         <form onSubmit={handleSubmit}>
-          <h1 className="h3 mb-4 fw-normal">Daily Bible Reading</h1>
+          <h1 className="mb-4 fw-bold">Daily Bible Reading</h1>
           <div className="form-floating w-100">
             <input
               type="email"
@@ -59,8 +63,20 @@ function Login() {
             <label>Password</label>
           </div>
           {errorMessage && <p className="error">{errorMessage}</p>}
-          <button className="w-100 btn btn-lg btn-primary" type="submit" disabled={isAuthenticating}>
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            disabled={isAuthenticating}
+          >
             Login
+          </button>
+          <button
+            className="w-100 btn btn-lg mt-2"
+            type="button"
+            disabled={isAuthenticating}
+            onClick={hideLogin}
+          >
+            Cancel
           </button>
         </form>
       </main>
