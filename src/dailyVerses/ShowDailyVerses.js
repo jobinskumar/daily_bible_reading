@@ -55,9 +55,11 @@ export default function ShowDailyVerses({
           <p className="m-0 me-3 text-end day">{getDayInWords(dateString)}</p>
         </div>
       </div>
-      <blockquote className="blockquote mx-2">
-        <p className="min-h-50 mt-4">{dailyReading}</p>
-      </blockquote>
+      <ul className="fs-4">
+        {dailyReading.map((chapter) => (
+          <li> {chapter} </li>
+        ))}
+      </ul>
       <div className="d-grid gap-2 col-6 mx-auto mb-2">
         {dailyStatus?.bibleReading ? (
           <button
