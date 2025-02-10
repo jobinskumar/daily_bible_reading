@@ -185,7 +185,7 @@ export const DailVerseData = [
   {
     day: "41",
     readingVerses:
-      "Exodus 6:13-30, Exodus 7,Exodus 8, Matthew 26:47-68, Psalm 19:7-14",
+      "Exodus 6:13-30, Exodus 7, Exodus 8, Matthew 26:47-68, Psalm 19:7-14",
   },
   {
     day: "42",
