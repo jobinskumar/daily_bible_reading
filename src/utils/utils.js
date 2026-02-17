@@ -25,6 +25,9 @@ export function getDailyStateFromDB(callback) {
     const myReadingRef = ref(database, `users/${uid}/my-reading`);
 
     const unsubscribe = onValue(myReadingRef, (snapshot) => {
+      // if (!localStorage.getItem("dailyStatus")) {
+        localStorage.setItem("dailyStatus", JSON.stringify(snapshot.val()));
+      // }
       callback(snapshot.val(), myReadingRef);
       // TODO: move unsubscribe before callback
       unsubscribe();
@@ -32,7 +35,7 @@ export function getDailyStateFromDB(callback) {
   }
 }
 
-export function setDailyStateInDB(date, data) {
+export function setDailyStateInDB(date, data, callback) {
   getDailyStateFromDB((dataFromDB, myReadingRef) => {
     let dailyStatus = dataFromDB;
     if (dailyStatus) {
@@ -44,6 +47,10 @@ export function setDailyStateInDB(date, data) {
       dailyStatus = {};
       dailyStatus[date] = { ...data };
     }
+
+    localStorage.setItem("dailyStatus", JSON.stringify(dailyStatus));
+    callback();
+
     set(myReadingRef, dailyStatus);
   });
 }
@@ -67,8 +74,8 @@ export function getISOLocalDateString(date) {
 export function formatDateString(dateString) {
   const newDate = new Date(dateString);
   const options = {
-    year: "numeric",
-    month: "short",
+    // year: "numeric",
+    month: "long",
     day: "numeric",
   };
 

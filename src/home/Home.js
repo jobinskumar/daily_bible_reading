@@ -18,12 +18,17 @@ export default function Home() {
   const { isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      getDailyStateFromDB((data) => {
-        if (data) {
-          setData(data);
-          setDailyStatus(data[dateString.split("T")[0]]);
-        }
+    if (
+      localStorage.getItem("dailyStatus") &&
+      localStorage.getItem("isLoggedIn")
+    ) {
+      const dataString = localStorage.getItem("dailyStatus");
+      setData(JSON.parse(dataString));
+      setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
+      getDailyStateFromDB(() => {
+        const dataString = localStorage.getItem("dailyStatus");
+        setData(JSON.parse(dataString));
+        setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
       });
     } else {
       setData({});
@@ -42,22 +47,23 @@ export default function Home() {
 
   function updateDailyStatusInCalendar(dateKey, newState) {
     // TODO: return updated data and based on that data update calendar
-    setDailyStateInDB(dateKey, newState);
-    setDailyStatus(newState);
+    setDailyStateInDB(dateKey, newState, () => {
+      setDailyStatus(newState);
+    });
   }
 
   return (
     <>
-      <ShowDailyVerses
-        dateString={dateString}
-        dailyStatusData={dailyStatus}
-        onDailyStatusUpdate={updateDailyStatusInCalendar}
-      />
-      <Calendar
-        handleSelection={handleSelection}
-        isDailyStatusUpdated={dailyStatus}
-        userBibleReadingData={data}
-      />
+        <ShowDailyVerses
+          dateString={dateString}
+          dailyStatusData={dailyStatus}
+          onDailyStatusUpdate={updateDailyStatusInCalendar}
+        />
+        <Calendar
+          handleSelection={handleSelection}
+          isDailyStatusUpdated={dailyStatus}
+          userBibleReadingData={data}
+        />
     </>
   );
 }

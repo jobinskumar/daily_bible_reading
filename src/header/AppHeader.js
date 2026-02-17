@@ -20,6 +20,8 @@ export default function AppHeader({ setIsShowLogin }) {
       .then(() => {
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("email");
+        sessionStorage.removeItem("dailyStatus");
+        sessionStorage.removeItem("isLoggedIn");
         setIsLoggedIn(false);
       })
       .catch((error) => {
@@ -29,40 +31,32 @@ export default function AppHeader({ setIsShowLogin }) {
 
   return (
     <>
-      <div className="header-login d-flex justify-content-between">
-        <h1 className="mt-3 ms-3 fw-bold">Daily Bible Reading</h1>
+      <div className="header-login">
+        <h1 className="header-title text-4xl mt-7 mb-5 ml-2 font-semibold">
+          Daily Bible Reading
+        </h1>
         {isLoggedIn ? (
-          <div className="dropdown mt-3 me-3 w-25">
-            <button
-              className="btn border-dark-subtle btn-light dropdown-toggle border w-100 text-truncate"
-              type="button"
-              aria-expanded="false"
-              onClick={toggleDropdownMenu}
-            >
-              {userEmail}
+          <div className="flex justify-between px-3 mb-5">
+            <h1 className="text-gray-800 text-lg">
+              Welcome,{" "}
+              <span className="font-bold text-blue-600">
+                {userEmail.split("@")[0]}
+              </span>
+              !
+            </h1>
+            <button class="font-bold p-1 rounded underline" onClick={logout}>
+              Logout
             </button>
-            {isShowDropdownMenu && (
-              <ul className="dropdown-menu show mt-1 dropdown-menu-end">
-                <li>
-                  <button
-                    className="dropdown-item"
-                    type="button"
-                    onClick={logout}
-                  >
-                    Logout
-                  </button>
-                </li>
-              </ul>
-            )}
           </div>
         ) : (
-          <button
-            type="button"
-            className="btn btn-small btn-light mt-3 me-3 border border-dark-subtle"
-            onClick={showLogin}
-          >
-            Login
-          </button>
+          <div className="flex justify-between px-3 mb-5">
+            <h1 className="text-gray-800 text-lg">
+              Welcome, <span className="font-bold text-blue-600">Guest</span>!
+            </h1>
+            <button class="font-bold p-1 rounded underline" onClick={showLogin}>
+              Login
+            </button>
+          </div>
         )}
       </div>
     </>

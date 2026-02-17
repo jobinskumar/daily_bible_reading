@@ -44,32 +44,32 @@ export default function ShowDailyVerses({
   }
 
   return (
-    <div className="border-bottom px-2 pt-3 border-info show-daily-verse">
-      <div className="d-flex">
-        <h2 className="h3 ms-2 my-2">Day {day}</h2>
-        {dailyStatus?.bibleReading && (
-          <span className="badge text-bg-success m-auto ms-2">Read</span>
-        )}
-        <div className="ms-auto">
-          <p className="mb-0 me-3 date">{formatDateString(dateString)}</p>
-          <p className="m-0 me-3 text-end day">{getDayInWords(dateString)}</p>
+    <div className="show-daily-verse verse-row bg-white p-5 rounded-3xl shadow-md bg-white/40 backdrop-blur-sm">
+      <div className="verse-row-top">
+        <div className="flex justify-between items-center">
+          <h2 className="verse-day text-xl font-semibold mb-2">
+            Today's reading
+          </h2>
+          <h3 className="verse-title text-white text-sm font-semibold bg-stone-500 px-3 py-1 rounded-3xl shadow-md shadow-stone-500/30">Day {day}</h3>
+        </div>
+        <div className="verse-meta flex items-center gap-2 mb-2">
+          <p className="day uppercase text-sm font-medium">{getDayInWords(dateString)},</p>
+          <p className="date uppercase text-sm font-medium">{formatDateString(dateString)}</p>
+          {dailyStatus?.bibleReading && <span className="badge-read text-xs bg-emerald-500 px-2 rounded-xl">Read</span>}
         </div>
       </div>
-      <ul className="fs-4">
-        {dailyReading.map((chapter) => (
-          <li> {chapter} </li>
+      <ul className="verse-list list-disc mx-6 my-4">
+        {dailyReading.map((chapter, index) => (
+          <li className="text-xl" key={index}> {chapter} </li>
         ))}
       </ul>
-      <div className="d-grid gap-2 col-6 mx-auto mb-2">
+      <div className="verse-actions">
         {dailyStatus?.bibleReading ? (
-          <button
-            className="btn btn-secondary mb-3 reset-btn"
-            onClick={markAsUnread}
-          >
+          <button className="btn-reset font-semibold px-2 underline" onClick={markAsUnread}>
             Reset
           </button>
         ) : (
-          <button className="btn btn-primary mb-3" onClick={markAsRead}>
+          <button className="btn-mark-read underline" onClick={markAsRead}>
             Mark as read
           </button>
         )}
