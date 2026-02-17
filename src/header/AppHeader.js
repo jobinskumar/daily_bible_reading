@@ -31,8 +31,8 @@ export default function AppHeader({ setIsShowLogin }) {
 
   return (
     <>
-      <div className="header-login">
-        <h1 className="header-title text-4xl mt-7 mb-5 ml-2 font-semibold">
+      <div className="header-login pt-20">
+        <h1 className="header-title text-4xl mt-0 mb-10 ml-2 font-semibold">
           Daily Bible Reading
         </h1>
         {isLoggedIn ? (

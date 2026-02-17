@@ -11,7 +11,7 @@ import { AuthContext } from "../auth/Auth";
 export default function Home() {
   const currentYear = new Date().getFullYear();
   const [dateString, setDateString] = useState(
-    getISOLocalDateString(new Date())
+    getISOLocalDateString(new Date()),
   );
   const [dailyStatus, setDailyStatus] = useState({});
   const [data, setData] = useState({});
@@ -54,16 +54,18 @@ export default function Home() {
 
   return (
     <>
-        <ShowDailyVerses
-          dateString={dateString}
-          dailyStatusData={dailyStatus}
-          onDailyStatusUpdate={updateDailyStatusInCalendar}
-        />
+      <ShowDailyVerses
+        dateString={dateString}
+        dailyStatusData={dailyStatus}
+        onDailyStatusUpdate={updateDailyStatusInCalendar}
+      />
+      <div className="mt-10">
         <Calendar
           handleSelection={handleSelection}
           isDailyStatusUpdated={dailyStatus}
           userBibleReadingData={data}
         />
+      </div>
     </>
   );
 }
