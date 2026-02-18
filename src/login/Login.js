@@ -28,11 +28,11 @@ function Login({ setIsShowLogin }) {
           sessionStorage.setItem("accessToken", user.accessToken);
         })
         .catch((error) => {
-          setErrorMessage("Invalid username or password");
+          setErrorMessage("Invalid username or password!");
           setIsAuthenticating(false);
         });
     } catch (error) {
-      setErrorMessage("Invalid username or password");
+      setErrorMessage("Invalid username or password!");
       setIsAuthenticating(false);
     }
   };
@@ -90,7 +90,7 @@ function Login({ setIsShowLogin }) {
           <div className="flex items-center gap-3 pt-4">
             <button
               type="submit"
-              className="flex-1 bg-stone-400 hover:bg-stone-500 text-white font-bold py-2 px-4 rounded transition-colors shadow-sm"
+              className="flex-1 bg-stone-400 hover:bg-stone-500 text-white font-bold py-2 px-4 rounded transition-colors shadow-sm shadow-stone-400/50 disabled:bg-gray-300 disabled:cursor-not-allowed"
               disabled={isAuthenticating}
             >
               Login
@@ -100,7 +100,7 @@ function Login({ setIsShowLogin }) {
               type="button"
               disabled={isAuthenticating}
               onClick={hideLogin}
-              className="flex-1 bg-white hover:bg-gray-50 text-gray-600 font-bold py-2 px-4 rounded border border-gray-300 transition-colors"
+              className="flex-1 bg-white hover:bg-gray-50 text-gray-600 font-bold py-2 px-4 rounded border border-gray-300 transition-colors shadow-sm shadow-gray-300/50 disabled:text-gray-600/50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

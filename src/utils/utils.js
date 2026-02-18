@@ -1,21 +1,12 @@
 import { onValue, ref, set } from "firebase/database";
 import { auth, database } from "../auth/Auth";
 
-export function getDailyStateFromLocalStorage(date) {
-  const dailyStatus = JSON.parse(localStorage.getItem("dailyStatus") || "{}");
+export function getDailyStatusOfGuestFromLocalStorage() {
+  const dailyStatus = JSON.parse(
+    localStorage.getItem("dailyStatusOfGuest") || "{}",
+  );
 
-  return dailyStatus[date];
-}
-
-export function setDailyStateInLocalStorage(date, data) {
-  const dailyStatus = JSON.parse(localStorage.getItem("dailyStatus") || "{}");
-
-  dailyStatus[date] = {
-    ...dailyStatus[date],
-    ...data,
-  };
-
-  localStorage.setItem("dailyStatus", JSON.stringify(dailyStatus));
+  return dailyStatus;
 }
 
 export function getDailyStateFromDB(callback) {
@@ -25,19 +16,20 @@ export function getDailyStateFromDB(callback) {
     const myReadingRef = ref(database, `users/${uid}/my-reading`);
 
     const unsubscribe = onValue(myReadingRef, (snapshot) => {
-      // if (!localStorage.getItem("dailyStatus")) {
-        localStorage.setItem("dailyStatus", JSON.stringify(snapshot.val()));
-      // }
+      localStorage.setItem("dailyStatus", JSON.stringify(snapshot.val()));
       callback(snapshot.val(), myReadingRef);
-      // TODO: move unsubscribe before callback
       unsubscribe();
     });
+  } else {
+    callback(null, null);
   }
 }
 
 export function setDailyStateInDB(date, data, callback) {
   getDailyStateFromDB((dataFromDB, myReadingRef) => {
-    let dailyStatus = dataFromDB;
+    let dailyStatus = myReadingRef
+      ? dataFromDB
+      : getDailyStatusOfGuestFromLocalStorage();
     if (dailyStatus) {
       dailyStatus[date] = {
         ...dailyStatus[date],
@@ -48,10 +40,14 @@ export function setDailyStateInDB(date, data, callback) {
       dailyStatus[date] = { ...data };
     }
 
-    localStorage.setItem("dailyStatus", JSON.stringify(dailyStatus));
-    callback();
-
-    set(myReadingRef, dailyStatus);
+    localStorage.setItem(
+      myReadingRef ? "dailyStatus" : "dailyStatusOfGuest",
+      JSON.stringify(dailyStatus),
+    );
+    callback(dailyStatus);
+    if (myReadingRef) {
+      set(myReadingRef, dailyStatus);
+    }
   });
 }
 

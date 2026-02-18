@@ -44,7 +44,7 @@ export default function AppHeader({ setIsShowLogin }) {
               </span>
               !
             </h1>
-            <button class="font-bold p-1 rounded underline" onClick={logout}>
+            <button className="font-bold p-1 rounded underline" onClick={logout}>
               Logout
             </button>
           </div>
@@ -53,7 +53,7 @@ export default function AppHeader({ setIsShowLogin }) {
             <h1 className="text-gray-800 text-lg">
               Welcome, <span className="font-bold text-blue-600">Guest</span>!
             </h1>
-            <button class="font-bold p-1 rounded underline" onClick={showLogin}>
+            <button className="font-bold p-1 rounded underline" onClick={showLogin}>
               Login
             </button>
           </div>

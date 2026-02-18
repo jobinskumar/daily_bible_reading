@@ -31,8 +31,9 @@ export default function Home() {
         setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
       });
     } else {
-      setData({});
-      setDailyStatus({});
+      const dataString = localStorage.getItem("dailyStatusOfGuest") || "{}";
+      setData(JSON.parse(dataString));
+      setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
     }
   }, [isLoggedIn]);
 
@@ -46,9 +47,9 @@ export default function Home() {
   }
 
   function updateDailyStatusInCalendar(dateKey, newState) {
-    // TODO: return updated data and based on that data update calendar
-    setDailyStateInDB(dateKey, newState, () => {
+    setDailyStateInDB(dateKey, newState, (dailyStatus) => {
       setDailyStatus(newState);
+      setData(dailyStatus);
     });
   }
 
@@ -59,7 +60,7 @@ export default function Home() {
         dailyStatusData={dailyStatus}
         onDailyStatusUpdate={updateDailyStatusInCalendar}
       />
-      <div className="mt-10">
+      <div className="my-10">
         <Calendar
           handleSelection={handleSelection}
           isDailyStatusUpdated={dailyStatus}

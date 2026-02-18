@@ -7,7 +7,7 @@ export default function Calendar({
   userBibleReadingData,
 }) {
   const [dailyUserBibleReadingData, setDailyUserBibleReadingData] = useState(
-    {}
+    {},
   );
   const [selectedDate, setSelectedDate] = useState({});
   const [currentDate] = useState(new Date());
@@ -19,6 +19,12 @@ export default function Calendar({
   }, [selectedDate, dailyUserBibleReadingData]);
 
   useEffect(() => {
+    if (!localStorage.getItem("isLoggedIn")) {
+      const dataString = localStorage.getItem("dailyStatusOfGuest") || "{}";
+      setDailyUserBibleReadingData(JSON.parse(dataString) || {});
+      return;
+    }
+
     if (localStorage.getItem("dailyStatus")) {
       const dataString = localStorage.getItem("dailyStatus");
       setDailyUserBibleReadingData(JSON.parse(dataString) || {});
@@ -104,7 +110,7 @@ export default function Calendar({
         >
           {displayDay}
           {isBibleRead && <span className="marker"></span>}
-        </div>
+        </div>,
       );
     }
 
@@ -142,7 +148,7 @@ export default function Calendar({
       displayDays.push(
         <div key={day} className="day weekday">
           {day}
-        </div>
+        </div>,
       );
     });
 
@@ -151,28 +157,50 @@ export default function Calendar({
 
   return (
     <div className="calendar-container">
-      <div className="calendar-header flex items-center justify-center m-4">
-        <p className="month-title flex-grow text-lg font-medium">
+      <div className="calendar-header flex items-center justify-center m-4 mx-1">
+        <p className="flex-grow text-lg font-medium">
           {state.displayMonth} {currentDate.getFullYear()}
         </p>
         <button
           type="button"
-          className="btn-prev w-6 h-6"
+          className="btn-prev w-6 h-6 mx-6 disabled:opacity-20"
           disabled={currentDate.getMonth() === 0}
           onClick={showPrevMonth}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
           </svg>
         </button>
         <button
           type="button"
-          className="btn-next w-6 h-6 disabled:opacity-20"
+          className="btn-next w-6 h-6 ml-6 mr-3 disabled:opacity-20"
           disabled={currentDate.getMonth() === 11}
           onClick={showNextMonth}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 font-bold">
-           <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="size-6 font-bold"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
           </svg>
         </button>
       </div>

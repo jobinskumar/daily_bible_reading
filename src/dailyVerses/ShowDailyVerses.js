@@ -47,14 +47,14 @@ export default function ShowDailyVerses({
     <div className="show-daily-verse verse-row bg-white p-5 rounded-3xl shadow-md bg-white/40 backdrop-blur-sm">
       <div className="verse-row-top">
         <div className="flex justify-between items-center">
-          <h2 className="verse-day text-xl font-semibold mb-2">
+          <h2 className="verse-day text-2xl font-semibold mb-2">
             Today's reading
           </h2>
           <h3 className="verse-title text-white text-sm font-semibold bg-stone-500 px-3 py-1 rounded-3xl shadow-md shadow-stone-500/30">Day {day}</h3>
         </div>
         <div className="verse-meta flex items-center gap-2 mb-2">
-          <p className="day uppercase text-sm font-medium">{getDayInWords(dateString)},</p>
-          <p className="date uppercase text-sm font-medium">{formatDateString(dateString)}</p>
+          <p className="day uppercase text-base font-medium">{getDayInWords(dateString)},</p>
+          <p className="date uppercase text-base font-medium">{formatDateString(dateString)}</p>
           {dailyStatus?.bibleReading && <span className="badge-read text-xs bg-emerald-500 px-2 rounded-xl">Read</span>}
         </div>
       </div>
