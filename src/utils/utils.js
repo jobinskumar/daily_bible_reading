@@ -1,18 +1,54 @@
-export function getDailyStateFromLocalStorage(date) {
-  const dailyStatus = JSON.parse(localStorage.getItem('dailyStatus')|| '{}');
+import { onValue, ref, set } from "firebase/database";
+import { auth, database } from "../auth/Auth";
 
-  return dailyStatus[date];
+export function getDailyStatusOfGuestFromLocalStorage() {
+  const dailyStatus = JSON.parse(
+    localStorage.getItem("dailyStatusOfGuest") || "{}",
+  );
+
+  return dailyStatus;
 }
 
-export function setDailyStateInLocalStorage(date, data) {
-  const dailyStatus = JSON.parse(localStorage.getItem('dailyStatus') || '{}');
+export function getDailyStateFromDB(callback) {
+  const uid = auth.currentUser?.uid;
 
-  dailyStatus[date] = {
-    ...dailyStatus[date],
-    ...data
-  };
+  if (uid) {
+    const myReadingRef = ref(database, `users/${uid}/my-reading`);
 
-  localStorage.setItem('dailyStatus', JSON.stringify(dailyStatus));
+    const unsubscribe = onValue(myReadingRef, (snapshot) => {
+      localStorage.setItem("dailyStatus", JSON.stringify(snapshot.val()));
+      callback(snapshot.val(), myReadingRef);
+      unsubscribe();
+    });
+  } else {
+    callback(null, null);
+  }
+}
+
+export function setDailyStateInDB(date, data, callback) {
+  getDailyStateFromDB((dataFromDB, myReadingRef) => {
+    let dailyStatus = myReadingRef
+      ? dataFromDB
+      : getDailyStatusOfGuestFromLocalStorage();
+    if (dailyStatus) {
+      dailyStatus[date] = {
+        ...dailyStatus[date],
+        ...data,
+      };
+    } else {
+      dailyStatus = {};
+      dailyStatus[date] = { ...data };
+    }
+
+    localStorage.setItem(
+      myReadingRef ? "dailyStatus" : "dailyStatusOfGuest",
+      JSON.stringify(dailyStatus),
+    );
+    callback(dailyStatus);
+    if (myReadingRef) {
+      set(myReadingRef, dailyStatus);
+    }
+  });
 }
 
 export function getISOLocalDateString(date) {
@@ -28,4 +64,23 @@ export function getISOLocalDateString(date) {
     "T00:00:00.000Z";
 
   return dateString;
+}
+
+// This function will convert date string 2024-02-25T00:00:00.000Z to Feb 25, 2024
+export function formatDateString(dateString) {
+  const newDate = new Date(dateString);
+  const options = {
+    // year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  return new Intl.DateTimeFormat("en-US", options).format(newDate);
+}
+
+export function getDayInWords(dateString) {
+  const newDate = new Date(dateString);
+  const options = { weekday: "long" };
+
+  return new Intl.DateTimeFormat("en-US", options).format(newDate);
 }

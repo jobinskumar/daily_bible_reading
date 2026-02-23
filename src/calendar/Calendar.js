@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
+import { getDailyStateFromDB } from "../utils/utils";
 
-export default function Calendar({handleSelection, isDailyStatusUpdated}) {
+export default function Calendar({
+  handleSelection,
+  isDailyStatusUpdated,
+  userBibleReadingData,
+}) {
+  const [dailyUserBibleReadingData, setDailyUserBibleReadingData] = useState(
+    {},
+  );
   const [selectedDate, setSelectedDate] = useState({});
   const [currentDate] = useState(new Date());
   const [state, setState] = useState(getCalendarState(currentDate.getMonth()));
@@ -8,14 +16,39 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
 
   useEffect(() => {
     setDays(getDays());
-  }, [selectedDate, isDailyStatusUpdated])
+  }, [selectedDate, dailyUserBibleReadingData]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("isLoggedIn")) {
+      const dataString = localStorage.getItem("dailyStatusOfGuest") || "{}";
+      setDailyUserBibleReadingData(JSON.parse(dataString) || {});
+      return;
+    }
+
+    if (localStorage.getItem("dailyStatus")) {
+      const dataString = localStorage.getItem("dailyStatus");
+      setDailyUserBibleReadingData(JSON.parse(dataString) || {});
+    } else {
+      getDailyStateFromDB((data) => {
+        setDailyUserBibleReadingData(data || {});
+      });
+    }
+  }, [isDailyStatusUpdated]);
+
+  useEffect(() => {
+    if (userBibleReadingData) {
+      setDailyUserBibleReadingData(userBibleReadingData);
+    }
+  }, [userBibleReadingData]);
 
   function getCalendarState(currentMonth) {
-    const displayMonth = currentDate.toLocaleDateString('en-US', {month: 'long'});
+    const displayMonth = currentDate.toLocaleDateString("en-US", {
+      month: "long",
+    });
 
     return {
       currentMonth: currentMonth,
-      displayMonth: displayMonth
+      displayMonth: displayMonth,
     };
   }
 
@@ -25,7 +58,7 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
 
     setState({
       currentMonth: currentMonth,
-      displayMonth: displayMonth
+      displayMonth: displayMonth,
     });
     setDays(getDays());
   }
@@ -34,8 +67,8 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const day = event.target.getAttribute("data-day");
     const month = (+event.target.getAttribute("data-month") + 1).toString();
     if (day && month) {
-      setSelectedDate({day, month});
-      handleSelection({day, month});
+      setSelectedDate({ day, month });
+      handleSelection({ day, month });
     }
   }
 
@@ -44,59 +77,52 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const startDayInWeek = getStartDate(currentDate).getDay();
     const endDay = getEndDate(currentDate).getDate();
     const rows = Math.ceil((startDayInWeek + endDay) / 7);
-    const currentDay = (new Date()).getDate();
-    const currentMonth = (new Date()).getMonth();
+    const currentDay = new Date().getDate();
+    const currentMonth = new Date().getMonth();
     let day = 1;
-    const dailyStatus = JSON.parse(localStorage.getItem('dailyStatus') || '{}');
     for (let i = 0; i < rows * 7; i++) {
-      const displayDay = i >= startDayInWeek && day <= endDay
-        ? day++
-        : "";
-      const isBibleRead = dailyStatus[
-        currentDate.getFullYear() + '-' +
-        (currentDate.getMonth() + 1).toString().padStart(2,'0') + '-' +
-        displayDay.toString().padStart(2,'0')
-      ]?.bibleReading;
+      const displayDay = i >= startDayInWeek && day <= endDay ? day++ : "";
+      const isBibleRead =
+        dailyUserBibleReadingData[
+          currentDate.getFullYear() +
+            "-" +
+            (currentDate.getMonth() + 1).toString().padStart(2, "0") +
+            "-" +
+            displayDay.toString().padStart(2, "0")
+        ]?.bibleReading;
       days.push(
         <div
+          role="button"
           key={i}
-          className={`day ${
+          className={`day border rounded ${
             currentDay === displayDay && currentMonth === currentDate.getMonth()
-              ? "current text-decoration-underline bg-white"
-              : "bg-opacity-50"
+              ? "current highlighted border-stone-500"
+              : "muted"
           } ${
             +selectedDate.day === displayDay &&
             selectedDate.month - 1 === currentDate.getMonth()
-              ? "selected"
-              : "bg-white"
+              ? "selected bg-stone-500 border-stone-300"
+              : "day-bg border-gray-300"
           }`}
           data-day={displayDay}
           data-month={currentDate.getMonth()}
           onClick={onDaySelection}
         >
           {displayDay}
-          {isBibleRead && <span className="marker"></span>}          
-        </div>
-      );      
+          {isBibleRead && <span className="marker"></span>}
+        </div>,
+      );
     }
 
     return days;
   }
 
   function getStartDate(currentDate) {
-    return new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
+    return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   }
 
   function getEndDate(currentDate) {
-    return new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0
-    );
+    return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   }
 
   function showPrevMonth() {
@@ -119,34 +145,64 @@ export default function Calendar({handleSelection, isDailyStatusUpdated}) {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const displayDays = [];
     days.forEach((day) => {
-      displayDays.push(<div key={day} className="day bg-white fw-bold">{day}</div>)
-    })
+      displayDays.push(
+        <div key={day} className="day weekday">
+          {day}
+        </div>,
+      );
+    });
 
     return displayDays;
   }
 
   return (
-    <div className="container mt-3 px-3">
-      <div className="d-flex mb-2">
-        <p className="align-self-center flex-grow-1 m-0 fw-bold">
+    <div className="calendar-container">
+      <div className="calendar-header flex items-center justify-center m-4 mx-1">
+        <p className="flex-grow text-lg font-medium">
           {state.displayMonth} {currentDate.getFullYear()}
         </p>
         <button
-            type="button"
-            className="btn btn-outline-primary h-100 border-0 me-1"
-            disabled={currentDate.getMonth() === 0}
-            onClick={showPrevMonth}
+          type="button"
+          className="btn-prev w-6 h-6 mx-6 disabled:opacity-20"
+          disabled={currentDate.getMonth() === 0}
+          onClick={showPrevMonth}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
           >
-            <i className="bi-arrow-left"></i>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
         </button>
         <button
-            type="button"
-            className="btn btn-outline-primary h-100 border-0"
-            disabled={currentDate.getMonth() === 11}
-            onClick={showNextMonth}
+          type="button"
+          className="btn-next w-6 h-6 ml-6 mr-3 disabled:opacity-20"
+          disabled={currentDate.getMonth() === 11}
+          onClick={showNextMonth}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            className="size-6 font-bold"
           >
-            <i className="bi-arrow-right"></i>
-          </button>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        </button>
       </div>
       <div className="calendar">
         {getWeekDays()}

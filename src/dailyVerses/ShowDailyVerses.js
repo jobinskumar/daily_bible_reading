@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
-import { getDailyStateFromLocalStorage, setDailyStateInLocalStorage } from "../utils/utils";
+import { formatDateString, getDayInWords } from "../utils/utils";
 import { DailVerseData } from "./DailyVerseData";
 
-export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
-  const dailyStatusKey = dateString.split('T')[0];
+export default function ShowDailyVerses({
+  dateString,
+  dailyStatusData,
+  onDailyStatusUpdate,
+}) {
+  const dailyStatusKey = dateString.split("T")[0];
   const [dailyStatus, setDailyStatus] = useState(false);
   const day = getDayOfTheYear(dateString);
-  const dailyReading = DailVerseData.find(value => +value.day === day)?.readingVerses ?? "";
+  const dailyReading =
+    DailVerseData.find((value) => +value.day === day)?.readingVerses ?? "";
 
   useEffect(() => {
-    setDailyStatus(getDailyStateFromLocalStorage(dailyStatusKey));
-  }, [dailyStatusKey])
+    setDailyStatus(dailyStatusData);
+  }, [dailyStatusData]);
 
   function getDayOfTheYear(date) {
     var now = new Date(date);
@@ -24,38 +29,50 @@ export default function ShowDailyVerses({ dateString, onDailyStatusUpdate }) {
 
   function markAsRead() {
     const newState = {
-      bibleReading: true
+      bibleReading: true,
     };
-    setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
-    onDailyStatusUpdate(newState);
+    onDailyStatusUpdate(dailyStatusKey, newState);
   }
 
   function markAsUnread() {
     const newState = {
-      bibleReading: false
+      bibleReading: false,
     };
-    setDailyStateInLocalStorage(dailyStatusKey, newState);
     setDailyStatus(newState);
-    onDailyStatusUpdate(newState);
+    onDailyStatusUpdate(dailyStatusKey, newState);
   }
 
   return (
-    <div className="border-bottom border-info container show-daily-verse">
-      <h1 className="h3 py-4 text-center">Daily Bible Reading</h1>
-      <blockquote className="blockquote mx-2">
-        <p>
-          Day - {day} 
-          { dailyStatus?.bibleReading && <span className="badge text-bg-success ms-2">Read</span> }
-        </p>
-        <p className="min-h-50">{dailyReading}</p>
-      </blockquote>
-      <div className="d-grid gap-2 col-6 mx-auto mb-2">
-        {
-          dailyStatus?.bibleReading
-          ? <button className="btn btn-secondary mb-3 reset-btn" onClick={markAsUnread}>Reset</button>
-          : <button className="btn btn-primary mb-3" onClick={markAsRead}>Mark as read</button>
-        }
+    <div className="show-daily-verse verse-row bg-white p-5 rounded-3xl shadow-md bg-white/40 backdrop-blur-sm">
+      <div className="verse-row-top">
+        <div className="flex justify-between items-center">
+          <h2 className="verse-day text-2xl font-semibold mb-2">
+            Today's reading
+          </h2>
+          <h3 className="verse-title text-white text-sm font-semibold bg-stone-500 px-3 py-1 rounded-3xl shadow-md shadow-stone-500/30">Day {day}</h3>
+        </div>
+        <div className="verse-meta flex items-center gap-2 mb-2">
+          <p className="day uppercase text-base font-medium">{getDayInWords(dateString)},</p>
+          <p className="date uppercase text-base font-medium">{formatDateString(dateString)}</p>
+          {dailyStatus?.bibleReading && <span className="badge-read text-xs bg-emerald-500 px-2 rounded-xl">Read</span>}
+        </div>
+      </div>
+      <ul className="verse-list list-disc mx-6 my-4">
+        {dailyReading.map((chapter, index) => (
+          <li className="text-xl" key={index}> {chapter} </li>
+        ))}
+      </ul>
+      <div className="verse-actions">
+        {dailyStatus?.bibleReading ? (
+          <button className="btn-reset font-semibold px-2 underline" onClick={markAsUnread}>
+            Reset
+          </button>
+        ) : (
+          <button className="btn-mark-read underline" onClick={markAsRead}>
+            Mark as read
+          </button>
+        )}
       </div>
     </div>
   );
