@@ -29,6 +29,7 @@ export default function ShowDailyVerses({
 
   function markAsRead() {
     const newState = {
+      ...dailyStatus,
       bibleReading: true,
     };
     setDailyStatus(newState);
@@ -37,6 +38,7 @@ export default function ShowDailyVerses({
 
   function markAsUnread() {
     const newState = {
+      ...dailyStatus,
       bibleReading: false,
     };
     setDailyStatus(newState);

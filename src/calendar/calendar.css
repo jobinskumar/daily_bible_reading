@@ -22,6 +22,17 @@
     right: 5%;
   }
 
+  .note-marker {
+    width: 6px;
+    height: 6px;
+    display: block;
+    background: #1da9db;
+    border-radius: 50%;
+    position: absolute;
+    top: 33%;
+    right: 5%;
+  }
+
   .current {
     font-weight: 900;
   }
@@ -31,6 +42,9 @@
 
     .marker {
       background: #fff;
+    }
+    .note-marker {
+      background: #b0b0b0;
     }
   }
 }

@@ -24,12 +24,9 @@ export const auth = getAuth();
 export const database = getDatabase(app);
 
 onAuthStateChanged(auth, (user) => {
+  let isUserLoggedIn = false;
   if (user) {
     sessionStorage.setItem("email", user.email);
-    localStorage.setItem("isLoggedIn", true);
-    const userLoggedIn = new CustomEvent("userLoggedIn", {
-      detail: {
-        isUserLoggedIn: true
       },
     });
     window.dispatchEvent(userLoggedIn);

@@ -7,6 +7,7 @@ import {
   setDailyStateInDB,
 } from "../utils/utils";
 import { AuthContext } from "../auth/Auth";
+import AppDailyNote from "../dailyNote/dailyNote";
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -15,27 +16,21 @@ export default function Home() {
   );
   const [dailyStatus, setDailyStatus] = useState({});
   const [data, setData] = useState({});
-  const { isLoggedIn } = useContext(AuthContext);
+  const { loggedInType } = useContext(AuthContext);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("dailyStatus") &&
-      localStorage.getItem("isLoggedIn")
-    ) {
-      const dataString = localStorage.getItem("dailyStatus");
-      setData(JSON.parse(dataString));
-      setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
+    if (loggedInType === "USER") {
       getDailyStateFromDB(() => {
         const dataString = localStorage.getItem("dailyStatus");
         setData(JSON.parse(dataString));
         setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
       });
-    } else {
+    } else if (loggedInType === "GUEST") {
       const dataString = localStorage.getItem("dailyStatusOfGuest") || "{}";
       setData(JSON.parse(dataString));
       setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
     }
-  }, [isLoggedIn]);
+  }, [loggedInType]);
 
   function handleSelection({ day, month }) {
     if (day && month) {
@@ -47,9 +42,9 @@ export default function Home() {
   }
 
   function updateDailyStatusInCalendar(dateKey, newState) {
-    setDailyStateInDB(dateKey, newState, (dailyStatus) => {
+    setDailyStateInDB(dateKey, newState, (dailyStatusFullData) => {
       setDailyStatus(newState);
-      setData(dailyStatus);
+      setData(dailyStatusFullData);
     });
   }
 
@@ -60,11 +55,17 @@ export default function Home() {
         dailyStatusData={dailyStatus}
         onDailyStatusUpdate={updateDailyStatusInCalendar}
       />
-      <div className="my-10">
+      <div className="my-7">
         <Calendar
           handleSelection={handleSelection}
-          isDailyStatusUpdated={dailyStatus}
           userBibleReadingData={data}
+        />
+      </div>
+      <div className="my-7">
+        <AppDailyNote
+          dateString={dateString}
+          dailyStatusData={dailyStatus}
+          onDailyStatusUpdate={updateDailyStatusInCalendar}
         />
       </div>
     </>

@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
-import { getDailyStateFromDB } from "../utils/utils";
 
-export default function Calendar({
-  handleSelection,
-  isDailyStatusUpdated,
-  userBibleReadingData,
-}) {
+export default function Calendar({ handleSelection, userBibleReadingData }) {
   const [dailyUserBibleReadingData, setDailyUserBibleReadingData] = useState(
     {},
   );
@@ -17,23 +12,6 @@ export default function Calendar({
   useEffect(() => {
     setDays(getDays());
   }, [selectedDate, dailyUserBibleReadingData]);
-
-  useEffect(() => {
-    if (!localStorage.getItem("isLoggedIn")) {
-      const dataString = localStorage.getItem("dailyStatusOfGuest") || "{}";
-      setDailyUserBibleReadingData(JSON.parse(dataString) || {});
-      return;
-    }
-
-    if (localStorage.getItem("dailyStatus")) {
-      const dataString = localStorage.getItem("dailyStatus");
-      setDailyUserBibleReadingData(JSON.parse(dataString) || {});
-    } else {
-      getDailyStateFromDB((data) => {
-        setDailyUserBibleReadingData(data || {});
-      });
-    }
-  }, [isDailyStatusUpdated]);
 
   useEffect(() => {
     if (userBibleReadingData) {
@@ -90,6 +68,14 @@ export default function Calendar({
             "-" +
             displayDay.toString().padStart(2, "0")
         ]?.bibleReading;
+      const isNoteAvailable =
+        dailyUserBibleReadingData[
+          currentDate.getFullYear() +
+            "-" +
+            (currentDate.getMonth() + 1).toString().padStart(2, "0") +
+            "-" +
+            displayDay.toString().padStart(2, "0")
+        ]?.notes;
       days.push(
         <div
           role="button"
@@ -110,6 +96,7 @@ export default function Calendar({
         >
           {displayDay}
           {isBibleRead && <span className="marker"></span>}
+          {isNoteAvailable && <span className="note-marker"></span>}
         </div>,
       );
     }
