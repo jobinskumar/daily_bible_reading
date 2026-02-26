@@ -4,8 +4,8 @@ import { createContext } from "react";
 import { getDatabase } from "firebase/database";
 
 export const AuthContext = createContext({
-  isLoggedIn: false,
-  setIsLoggedIn: () => {},
+  loggedInType: null,
+  setLoggedInType: () => {},
 });
 
 const firebaseConfig = {
@@ -27,12 +27,16 @@ onAuthStateChanged(auth, (user) => {
   let isUserLoggedIn = false;
   if (user) {
     sessionStorage.setItem("email", user.email);
-      },
-    });
-    window.dispatchEvent(userLoggedIn);
+    isUserLoggedIn = true;
   } else {
     sessionStorage.removeItem("email");
     localStorage.removeItem("dailyStatus");
-    localStorage.removeItem("isLoggedIn");
+    isUserLoggedIn = false;
   }
+  const userLoggedIn = new CustomEvent("userLoggedIn", {
+    detail: {
+      isUserLoggedIn,
+    },
+  });
+  window.dispatchEvent(userLoggedIn);
 });

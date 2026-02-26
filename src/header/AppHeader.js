@@ -25,7 +25,7 @@ export default function AppHeader({ setIsShowLogin }) {
 
   return (
     <>
-      <div className="header-login pt-8">
+      <div className="header-login pt-8 mx-auto lg:max-w-[80%]">
         <h1 className="header-title text-4xl mt-0 mb-5 ml-2 font-semibold">
           Daily Bible Reading
         </h1>

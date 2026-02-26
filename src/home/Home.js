@@ -20,6 +20,13 @@ export default function Home() {
 
   useEffect(() => {
     if (loggedInType === "USER") {
+      const dataFromLocalStorage = localStorage.getItem("dailyStatus");
+      if (dataFromLocalStorage) {
+        setData(JSON.parse(dataFromLocalStorage));
+        setDailyStatus(JSON.parse(dataFromLocalStorage)[dateString.split("T")[0]]);
+        return;
+      }
+
       getDailyStateFromDB(() => {
         const dataString = localStorage.getItem("dailyStatus");
         setData(JSON.parse(dataString));
@@ -49,25 +56,31 @@ export default function Home() {
   }
 
   return (
-    <>
-      <ShowDailyVerses
-        dateString={dateString}
-        dailyStatusData={dailyStatus}
-        onDailyStatusUpdate={updateDailyStatusInCalendar}
-      />
-      <div className="my-7">
-        <Calendar
-          handleSelection={handleSelection}
-          userBibleReadingData={data}
-        />
+    <div className="flex lg:gap-5 flex-col lg:flex-row justify-center">
+      <div className="lg:max-w-[40%] grow">
+        <div className="py-5">
+          <ShowDailyVerses
+            dateString={dateString}
+            dailyStatusData={dailyStatus}
+            onDailyStatusUpdate={updateDailyStatusInCalendar}
+          />
+        </div>
+        <div className="py-5">
+          <Calendar
+            handleSelection={handleSelection}
+            userBibleReadingData={data}
+          />
+        </div>
       </div>
-      <div className="my-7">
-        <AppDailyNote
-          dateString={dateString}
-          dailyStatusData={dailyStatus}
-          onDailyStatusUpdate={updateDailyStatusInCalendar}
-        />
+      <div className="lg:max-w-[40%] grow">
+        <div className="py-5">
+          <AppDailyNote
+            dateString={dateString}
+            dailyStatusData={dailyStatus}
+            onDailyStatusUpdate={updateDailyStatusInCalendar}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }

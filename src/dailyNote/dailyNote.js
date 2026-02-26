@@ -62,7 +62,9 @@ export default function AppDailyNote({
               </button>
             </div>
           ) : (
-            ""
+            <p className="text-xs text-gray-400 p-1 text-right">
+              {formatDateString(dateString)}
+            </p>
           )}
         </div>
         {isEditMode ? (
@@ -90,8 +92,7 @@ export default function AppDailyNote({
             onClick={handleEditMode}
           >
             <pre className="whitespace-pre-line text-sm text-gray-500 italic">
-              {dailyStatusData?.notes ||
-                "No notes added for " + formatDateString(dateString) + "."}
+              {dailyStatusData?.notes || "No notes added."}
             </pre>
           </div>
         )}
