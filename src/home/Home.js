@@ -20,13 +20,6 @@ export default function Home() {
 
   useEffect(() => {
     if (loggedInType === "USER") {
-      const dataFromLocalStorage = localStorage.getItem("dailyStatus");
-      if (dataFromLocalStorage) {
-        setData(JSON.parse(dataFromLocalStorage));
-        setDailyStatus(JSON.parse(dataFromLocalStorage)[dateString.split("T")[0]]);
-        return;
-      }
-
       getDailyStateFromDB(() => {
         const dataString = localStorage.getItem("dailyStatus");
         setData(JSON.parse(dataString));
@@ -38,6 +31,16 @@ export default function Home() {
       setDailyStatus(JSON.parse(dataString)[dateString.split("T")[0]]);
     }
   }, [loggedInType]);
+
+  useEffect(() => {
+    const dataFromLocalStorage = localStorage.getItem("dailyStatus");
+    if (dataFromLocalStorage) {
+      setData(JSON.parse(dataFromLocalStorage));
+      setDailyStatus(
+        JSON.parse(dataFromLocalStorage)[dateString.split("T")[0]],
+      );
+    }
+  }, []);
 
   function handleSelection({ day, month }) {
     if (day && month) {

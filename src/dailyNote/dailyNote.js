@@ -9,7 +9,7 @@ export default function AppDailyNote({
   const [isEditMode, setIsEditMode] = useState(false);
   const [note, setNote] = useState(dailyStatusData?.notes || "");
   const [textAreaCharLen, setTextAreaCharLen] = useState(0);
-  const maxCharLimit = 500;
+  const maxCharLimit = 1000;
 
   useEffect(() => {
     setNote(dailyStatusData?.notes || "");
